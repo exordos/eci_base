@@ -64,17 +64,14 @@ pip install pip --upgrade
 
 # In the dev mode the exordos_core package is installed from the local machine
 if [[ "$DEV_MODE" == "true" ]]; then
-    pip install -r "$SDK_PATH"/requirements.txt
-    pip install -e "$SDK_PATH"
+    uv pip install -e "$SDK_PATH"
 # Install the Core Agent as a package from pypi
 else
-    pip install gcl-sdk=="$GEN_SDK_VERSION"
+    uv pip install gcl-sdk=="$GEN_SDK_VERSION"
 fi
 
 sudo cp -r "$IMG_ARTS_PATH/etc/exordos_universal_agent" /etc/
-sudo ln -sf "$AGENT_PATH/.venv/bin/genesis-universal-agent" "/usr/bin/exordos-universal-agent"
-# Keep legacy symlink for backward compatibility
-sudo ln -sf "$AGENT_PATH/.venv/bin/genesis-universal-agent" "/usr/bin/genesis-universal-agent"
+sudo ln -sf "$AGENT_PATH/.venv/bin/exordos-universal-agent" "/usr/bin/exordos-universal-agent"
 
 
 # Install stuff for bootstrap procedure and systemd services
