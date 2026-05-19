@@ -25,7 +25,7 @@ jobs:
           set -eux
 
           # Build in all image formats
-          export GEN_IMG_FORMAT=qcow2,gz,raw
+          export GEN_IMG_FORMAT=qcow2,zst,raw
           
           exordos build --only-images $(pwd)
 
@@ -36,13 +36,13 @@ jobs:
           cd output
           curl -X PUT --upload-file exordos-base.qcow2 \
             ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/${VERSION}/exordos-base.qcow2
-          curl -X PUT --upload-file exordos-base.raw.gz \
-            ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/${VERSION}/exordos-base.raw.gz
+          curl -X PUT --upload-file exordos-base.raw.zst \
+            ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/${VERSION}/exordos-base.raw.zst
           curl -X PUT --upload-file exordos-base.raw \
             ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/${VERSION}/exordos-base.raw
 
           sha256sum exordos-base.qcow2 >> SHA256SUMS
-          sha256sum exordos-base.raw.gz >> SHA256SUMS
+          sha256sum exordos-base.raw.zst >> SHA256SUMS
           sha256sum exordos-base.raw >> SHA256SUMS
 
           curl -X PUT --upload-file SHA256SUMS \
@@ -51,8 +51,8 @@ jobs:
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             curl -X PUT --upload-file exordos-base.qcow2 \
               ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/latest/exordos-base.qcow2
-            curl -X PUT --upload-file exordos-base.raw.gz \
-              ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/latest/exordos-base.raw.gz
+            curl -X PUT --upload-file exordos-base.raw.zst \
+              ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/latest/exordos-base.raw.zst
             curl -X PUT --upload-file exordos-base.raw \
               ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/latest/exordos-base.raw
             curl -X PUT --upload-file SHA256SUMS \

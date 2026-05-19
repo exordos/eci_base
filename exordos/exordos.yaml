@@ -22,7 +22,7 @@ build:
         format: GEN_IMG_FORMAT=qcow2
         envs:
           - GEN_USER_PASSWD
-          - GEN_SDK_VERSION=2.0.0
+          - GEN_SDK_VERSION=3.0.0
 
         # OS profile for the image
         profile: ubuntu_26
