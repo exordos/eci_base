@@ -27,7 +27,7 @@ jobs:
           # Build in all image formats
           export GEN_IMG_FORMAT=qcow2,zst,raw
           
-          exordos build --only-images $(pwd)
+          exordos build $(pwd)
 
           # Temporary upload step is done in the build script
           VERSION="$(exordos --silent get-version .)"
