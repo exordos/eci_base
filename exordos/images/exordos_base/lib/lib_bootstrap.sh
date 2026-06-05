@@ -198,9 +198,13 @@ prepare_persistent_disk() {
 # Args:
 #   $1 - path to the old data directory (e.g., /var/lib/postgresql/18/main)
 #   $2 - path to the persistent directory (e.g., /persist/postgresql)
+#   $3 - (optional) owner user to apply to persistent_dir (default: inherited from old_data_dir)
+#   $4 - (optional) owner group to apply to persistent_dir (default: inherited from old_data_dir)
 migrate_to_persistent() {
     local old_data_dir="$1"
     local persistent_dir="$2"
+    local override_user="${3:-}"
+    local override_group="${4:-}"
 
     if [[ -z "$old_data_dir" ]] || [[ -z "$persistent_dir" ]]; then
         echo "ERROR: migrate_to_persistent requires old_data_dir and persistent_dir"
@@ -236,6 +240,8 @@ migrate_to_persistent() {
             local owner group
             owner=$(stat -c '%U' "$old_data_dir" 2>/dev/null || echo "root")
             group=$(stat -c '%G' "$old_data_dir" 2>/dev/null || echo "root")
+            owner="${override_user:-$owner}"
+            group="${override_group:-$group}"
             chown "$owner:$group" "$tmp_dir"
 
             local perms
@@ -279,10 +285,14 @@ migrate_to_persistent() {
 #   $1 - path to the old data directory (e.g., /var/lib/postgresql/18/main)
 #   $2 - path to the persistent directory (e.g., /persist/postgresql)
 #   $3 - space-separated list of systemd services to stop/start, may be empty
+#   $4 - (optional) owner user to apply to persistent_dir (default: inherited from old_data_dir)
+#   $5 - (optional) owner group to apply to persistent_dir (default: inherited from old_data_dir)
 migrate_to_persistent_stop_start() {
     local old_data_dir="$1"
     local persistent_dir="$2"
     local services="$3"
+    local override_user="${4:-}"
+    local override_group="${5:-}"
 
     # Stop services (if any)
     if [[ -n "$services" ]]; then
@@ -302,7 +312,7 @@ migrate_to_persistent_stop_start() {
         done
     fi
 
-    migrate_to_persistent $old_data_dir $persistent_dir
+    migrate_to_persistent "$old_data_dir" "$persistent_dir" "$override_user" "$override_group"
 
     # Start services again
     if [[ -n "$services" ]]; then
@@ -319,12 +329,16 @@ migrate_to_persistent_stop_start() {
 #   $1 - path to the old data directory (e.g., /var/lib/postgresql/18/main)
 #   $2 - path to the persistent directory (e.g., /persist/postgresql)
 #   $3 - space-separated list of systemd services to stop/start, may be empty
+#   $4 - (optional) owner user to apply to persistent_dir (default: inherited from old_data_dir)
+#   $5 - (optional) owner group to apply to persistent_dir (default: inherited from old_data_dir)
 migrate_to_persistent_restart() {
     local old_data_dir="$1"
     local persistent_dir="$2"
     local services="$3"
+    local override_user="${4:-}"
+    local override_group="${5:-}"
 
-    migrate_to_persistent $old_data_dir $persistent_dir
+    migrate_to_persistent "$old_data_dir" "$persistent_dir" "$override_user" "$override_group"
 
     # Restart services
     if [[ -n "$services" ]]; then
