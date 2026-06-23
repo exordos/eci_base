@@ -89,11 +89,12 @@ sudo cp -a "$IMG_ARTS_PATH/lib/." "/usr/local/lib/exordos/"
 # Enable exordos core services
 sudo systemctl enable exordos-bootstrap exordos-root-autoresize exordos-universal-agent
 
+# Commented out because we don't need Alloy for now and we are going to change monitoring solution
 # Install Alloy
-wget -q https://repo.exordos.com/alloy/alloy-${ALLOY_VERSION}-1.amd64.deb
-#wget -q https://github.com/grafana/alloy/releases/download/v${ALLOY_VERSION}/alloy-${ALLOY_VERSION}-1.amd64.deb
-sudo dpkg -i alloy-${ALLOY_VERSION}-1.amd64.deb
-rm -f alloy-${ALLOY_VERSION}-1.amd64.deb
+# wget -q https://repo.exordos.com/alloy/alloy-${ALLOY_VERSION}-1.amd64.deb
+# wget -q https://github.com/grafana/alloy/releases/download/v${ALLOY_VERSION}/alloy-${ALLOY_VERSION}-1.amd64.deb
+# sudo dpkg -i alloy-${ALLOY_VERSION}-1.amd64.deb
+# rm -f alloy-${ALLOY_VERSION}-1.amd64.deb
 
 # Set default password
 cat > /tmp/__passwd <<EOF
@@ -114,7 +115,7 @@ if [ -n "$LATEST_KERNEL_PKG" ]; then
     fi
 fi
 
-sudo apt autopurge -y snapd libllvm19
+sudo apt autopurge -y snapd libllvm19 python3-botocore python-babel-localedata python3-twisted
 sudo rm -fr /opt/eci_base
 sudo apt-get clean
 sudo rm -rf /var/lib/apt/lists/*
