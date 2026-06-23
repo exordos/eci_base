@@ -41,6 +41,8 @@ fi
 sudo cp "$IMG_ARTS_PATH/etc/apt/sources.list" /etc/apt/sources.list
 sudo sed -i "s/release/$(lsb_release -cs)/g" /etc/apt/sources.list
 
+sudo sed -i 's/^preserve_hostname: false/preserve_hostname: false\napt_preserve_sources_list: true/' /etc/cloud/cloud.cfg
+
 # Install packages
 sudo apt update
 sudo apt dist-upgrade -y
@@ -48,7 +50,7 @@ sudo apt install -y build-essential python3-dev python3-venv \
     cloud-guest-utils irqbalance qemu-guest-agent libev-dev rsync parted j2cli
 
 export UV_INSTALL_DIR="/usr/local/bin"
-curl --fail --show-error --location --progress-bar https://repository.genesis-core.tech/uv/0.11.11/uv --output "${UV_INSTALL_DIR}/uv"
+curl --fail --show-error --location --progress-bar https://repo.exordos.com/uv/0.11.11/uv --output "${UV_INSTALL_DIR}/uv"
 chmod +x "${UV_INSTALL_DIR}/uv"
 #export UV_INSTALLER_GHE_BASE_URL=https://github.com
 #curl -LsSf https://github.com/astral-sh/uv/releases/download/0.11.7/uv-installer.sh | sh
@@ -88,7 +90,7 @@ sudo cp -a "$IMG_ARTS_PATH/lib/." "/usr/local/lib/exordos/"
 sudo systemctl enable exordos-bootstrap exordos-root-autoresize exordos-universal-agent
 
 # Install Alloy
-wget -q https://repository.genesis-core.tech/alloy/alloy-${ALLOY_VERSION}-1.amd64.deb
+wget -q https://repo.exordos.com/alloy/alloy-${ALLOY_VERSION}-1.amd64.deb
 #wget -q https://github.com/grafana/alloy/releases/download/v${ALLOY_VERSION}/alloy-${ALLOY_VERSION}-1.amd64.deb
 sudo dpkg -i alloy-${ALLOY_VERSION}-1.amd64.deb
 rm -f alloy-${ALLOY_VERSION}-1.amd64.deb
@@ -111,6 +113,7 @@ if [ -n "$LATEST_KERNEL_PKG" ]; then
         sudo DEBIAN_FRONTEND=noninteractive apt-get autopurge -y $OLD_PKGS
     fi
 fi
+
 sudo apt autopurge -y snapd libllvm19
 sudo rm -fr /opt/eci_base
 sudo apt-get clean
