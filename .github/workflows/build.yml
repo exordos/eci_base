@@ -8,6 +8,7 @@ on:
 
 env:
   PROJECT_NAME: exordos-base
+  PROJECT_NAME_MINIMAL: exordos-base-minimal
   REPO_ENDPOINT_PUT: http://10.20.0.1:8082
 
 jobs:
@@ -25,7 +26,7 @@ jobs:
           set -eux
 
           # Build in all image formats
-          export GEN_IMG_FORMAT=qcow2,zst,raw
+          export GEN_IMG_FORMAT=qcow2,zst
           
           exordos build $(pwd)
 
@@ -34,29 +35,43 @@ jobs:
 
           # Upload the VM images
           cd output
-          curl -X PUT --upload-file exordos-base.qcow2 \
-            ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/${VERSION}/exordos-base.qcow2
-          curl -X PUT --upload-file exordos-base.raw.zst \
-            ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/${VERSION}/exordos-base.raw.zst
-          curl -X PUT --upload-file exordos-base.raw \
-            ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/${VERSION}/exordos-base.raw
+
+          upload_image() {
+            local file=$1
+            local project=${2:-$PROJECT_NAME}
+            curl -X PUT --upload-file "$file" \
+              "${REPO_ENDPOINT_PUT}/${project}/${VERSION}/$file"
+          }
+
+          upload_image exordos-base.qcow2
+          upload_image exordos-base.raw.zst
+          upload_image exordos-base-minimal.qcow2 $PROJECT_NAME_MINIMAL
+          upload_image exordos-base-minimal.raw.zst $PROJECT_NAME_MINIMAL
 
           sha256sum exordos-base.qcow2 >> SHA256SUMS
           sha256sum exordos-base.raw.zst >> SHA256SUMS
-          sha256sum exordos-base.raw >> SHA256SUMS
+          sha256sum exordos-base-minimal.qcow2 >> SHA256SUMS
+          sha256sum exordos-base-minimal.raw.zst >> SHA256SUMS
 
           curl -X PUT --upload-file SHA256SUMS \
             ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/${VERSION}/SHA256SUMS
+          curl -X PUT --upload-file SHA256SUMS \
+            ${REPO_ENDPOINT_PUT}/${PROJECT_NAME_MINIMAL}/${VERSION}/SHA256SUMS
 
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-            curl -X PUT --upload-file exordos-base.qcow2 \
-              ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/latest/exordos-base.qcow2
-            curl -X PUT --upload-file exordos-base.raw.zst \
-              ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/latest/exordos-base.raw.zst
-            curl -X PUT --upload-file exordos-base.raw \
-              ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/latest/exordos-base.raw
-            curl -X PUT --upload-file SHA256SUMS \
-              ${REPO_ENDPOINT_PUT}/${PROJECT_NAME}/latest/SHA256SUMS
+            upload_latest() {
+              local file=$1
+              local project=${2:-$PROJECT_NAME}
+              curl -X PUT --upload-file "$file" \
+                "${REPO_ENDPOINT_PUT}/${project}/latest/$file"
+            }
+
+            upload_latest exordos-base.qcow2
+            upload_latest exordos-base.raw.zst
+            upload_latest exordos-base-minimal.qcow2 $PROJECT_NAME_MINIMAL
+            upload_latest exordos-base-minimal.raw.zst $PROJECT_NAME_MINIMAL
+            upload_latest SHA256SUMS
+            upload_latest SHA256SUMS $PROJECT_NAME_MINIMAL
           fi
 
 
