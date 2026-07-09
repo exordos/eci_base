@@ -260,6 +260,16 @@ migrate_to_persistent() {
         fi
     fi
 
+    # Apply override ownership if provided (even when dir already exists)
+    if [[ -n "$override_user" ]] && [[ -n "$override_group" ]]; then
+        if [[ -d "$persistent_dir" ]]; then
+            echo "Applying ownership $override_user:$override_group to $persistent_dir"
+            chown -R "$override_user:$override_group" "$persistent_dir"
+        else
+            echo "WARNING: $persistent_dir does not exist, skipping ownership override"
+        fi
+    fi
+
     # Add bind mount to fstab if not already present
     if ! grep -q "$old_data_dir" /etc/fstab 2>/dev/null; then
         echo "$persistent_dir $old_data_dir none bind 0 0" >> /etc/fstab
