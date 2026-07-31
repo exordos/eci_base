@@ -47,7 +47,8 @@ sudo sed -i 's/^preserve_hostname: false/preserve_hostname: false\napt_preserve_
 sudo apt update
 sudo apt dist-upgrade -y
 sudo apt install -y build-essential python3-dev python3-venv \
-    cloud-guest-utils irqbalance qemu-guest-agent libev-dev rsync parted j2cli vim
+    cloud-guest-utils irqbalance qemu-guest-agent libev-dev rsync parted j2cli vim \
+    xfsprogs
 
 export UV_INSTALL_DIR="/usr/local/bin"
 curl --fail --show-error --location --progress-bar https://repo.exordos.com/uv/0.11.11/uv --output "${UV_INSTALL_DIR}/uv"
