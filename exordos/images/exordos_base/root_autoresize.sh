@@ -49,6 +49,23 @@ echo "Detected root device: $ROOT_DEV"
 echo "Detected partition name: $PARTITION_NAME"
 echo "Detected partition number: $PARTITION_NUMBER"
 
-# Grow root partition and resize filesystem 
+# Detect root filesystem type to pick the proper grow tool
+ROOT_FSTYPE=$(findmnt -n -o FSTYPE /)
+echo "Detected root filesystem: $ROOT_FSTYPE"
+
+# Grow root partition and resize filesystem
 growpart $ROOT_DEV $PARTITION_NUMBER || true
-resize2fs /dev/$PARTITION_NAME
+
+case "$ROOT_FSTYPE" in
+  ext2|ext3|ext4)
+    resize2fs /dev/$PARTITION_NAME
+    ;;
+  xfs)
+    # XFS grows by mount point, not by device
+    xfs_growfs /
+    ;;
+  *)
+    echo "Unsupported root filesystem '$ROOT_FSTYPE'; cannot grow it"
+    exit 1
+    ;;
+esac
