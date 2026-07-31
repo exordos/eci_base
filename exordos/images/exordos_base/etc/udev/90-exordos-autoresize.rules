@@ -1,0 +1,5 @@
+# The kernel emits a "change" uevent with RESIZE=1 when the hypervisor
+# enlarges a disk of a running machine. Grow the partitions and filesystems
+# on that disk so the new space becomes usable without a reboot.
+ACTION=="change", SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ENV{RESIZE}=="1", \
+    ENV{SYSTEMD_WANTS}+="exordos-autoresize@%k.service"

@@ -79,15 +79,17 @@ sudo ln -sf "$AGENT_PATH/.venv/bin/exordos-universal-agent" "/usr/bin/exordos-un
 # Install stuff for bootstrap procedure and systemd services
 sudo mkdir -p "$WORK_DIR/bootstrap/scripts/"
 sudo cp "$IMG_ARTS_PATH/bootstrap.sh" "$WORK_DIR/bootstrap/"
-sudo cp "$IMG_ARTS_PATH/root_autoresize.sh" "/usr/bin/"
+sudo cp "$IMG_ARTS_PATH/exordos_autoresize.sh" "/usr/bin/"
 sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-bootstrap.service" $SYSTEMD_SERVICE_DIR
-sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-root-autoresize.service" $SYSTEMD_SERVICE_DIR
+sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-autoresize.service" $SYSTEMD_SERVICE_DIR
+sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-autoresize@.service" $SYSTEMD_SERVICE_DIR
 sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-universal-agent.service" $SYSTEMD_SERVICE_DIR
+sudo cp "$IMG_ARTS_PATH/etc/udev/90-exordos-autoresize.rules" /etc/udev/rules.d/
 sudo mkdir -p "/usr/local/lib/exordos/"
 sudo cp -a "$IMG_ARTS_PATH/lib/." "/usr/local/lib/exordos/"
 
 # Enable exordos core services
-sudo systemctl enable exordos-bootstrap exordos-root-autoresize exordos-universal-agent
+sudo systemctl enable exordos-bootstrap exordos-autoresize exordos-universal-agent
 
 # Commented out because we don't need Alloy for now and we are going to change monitoring solution
 # Install Alloy

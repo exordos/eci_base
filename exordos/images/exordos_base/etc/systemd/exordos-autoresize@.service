@@ -1,0 +1,9 @@
+[Unit]
+Description=Exordos disk autoresize for /dev/%i
+Conflicts=shutdown.target
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+StandardOutput=journal
+ExecStart=/usr/bin/exordos_autoresize.sh /dev/%i
