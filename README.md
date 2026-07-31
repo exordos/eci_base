@@ -10,7 +10,7 @@ This repository builds two base images for Exordos Core project. The images cont
 The key features are:
 
 - [Universal Agent](https://github.com/infraguys/gcl_sdk/wiki/universal_agent) service.
-- Exordos root autoresize service. Tries to perform resize of the root partition at every boot if it's possible.
+- Exordos autoresize service. Grows partitions and filesystems (ext2/3/4 and xfs) up to the disk size, at every boot and, via a udev rule, when the hypervisor enlarges a disk of a running machine.
 - Exordos bootstrap service. Runs the bootstrap scripts.
 
 ## 🛠️ Build
