@@ -4,14 +4,15 @@ This repository builds two base images for Exordos Core project. The images cont
 
 ## Images
 
-- **exordos-base** - Full-featured base image using Ubuntu 26 profile with 4.5GB disk size
-- **exordos-base-minimal** - Minimal base image using Ubuntu 26 minimal profile with 3.8GB disk size
+- **exordos-base** - Full-featured base image using Ubuntu 26 profile with 4.7GB disk size
+- **exordos-base-minimal** - Minimal base image using Ubuntu 26 minimal profile with 4.0GB disk size
 
 The key features are:
 
 - [Universal Agent](https://github.com/infraguys/gcl_sdk/wiki/universal_agent) service.
 - Exordos autoresize service. Grows partitions and filesystems (ext2/3/4 and xfs) up to the disk size, at every boot and, via a udev rule, when the hypervisor enlarges a disk of a running machine.
 - Exordos bootstrap service. Runs the bootstrap scripts.
+- Observability agents: [node_exporter](https://github.com/prometheus/node_exporter) (node-level metrics on `127.0.0.1:9100`), [vmagent](https://docs.victoriametrics.com/victoriametrics/vmagent/) (scrapes node_exporter, relays to VictoriaMetrics), and [vlagent](https://docs.victoriametrics.com/victorialogs/vlagent/) (receives syslog on `127.0.0.1:9514` and journald on `127.0.0.1:9429`, relays to VictoriaLogs). rsyslog forwards all syslog messages to vlagent on `127.0.0.1:9514`; `systemd-journal-upload` forwards journald logs to vlagent's `/insert/journald` HTTP endpoint on `127.0.0.1:9429`. vmagent and vlagent use `ExecStartPre` to wait for the observability DNS record (`victoria-storage.local.genesis-core.tech`) to resolve before starting. If the observability element is not deployed, the services stay dormant but enabled. node_exporter starts on every boot.
 
 ## 🛠️ Build
 

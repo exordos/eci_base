@@ -1,0 +1,18 @@
+[Unit]
+Description=Exordos Node Exporter (Prometheus)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node_exporter \
+    --web.listen-address=127.0.0.1:9100
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=5
+NoNewPrivileges=true
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

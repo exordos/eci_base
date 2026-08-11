@@ -1,0 +1,23 @@
+[Unit]
+Description=Exordos vmagent (VictoriaMetrics metrics agent)
+After=network-online.target exordos-node-exporter.service
+Wants=network-online.target exordos-node-exporter.service
+
+[Service]
+Type=simple
+Environment=OBS_HOST=victoria-storage.local.genesis-core.tech
+EnvironmentFile=-/etc/exordos_observability/observability.conf
+ExecStartPre=/usr/local/lib/exordos/exordos-observability-wait-dns.sh
+ExecStartPre=/bin/sh -c 'sed "s/__HOSTNAME__/$(hostname)/" /etc/exordos_observability/vmagent_scrape.yml.tpl > /etc/exordos_observability/vmagent_scrape.yml'
+ExecStart=/usr/bin/vmagent \
+    -promscrape.config=/etc/exordos_observability/vmagent_scrape.yml \
+    -remoteWrite.url=http://${OBS_HOST}:8428/api/v1/write
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=10
+NoNewPrivileges=true
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

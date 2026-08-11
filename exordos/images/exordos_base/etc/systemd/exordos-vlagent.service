@@ -1,0 +1,23 @@
+[Unit]
+Description=Exordos vlagent (VictoriaLogs logs agent)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=OBS_HOST=victoria-storage.local.genesis-core.tech
+EnvironmentFile=-/etc/exordos_observability/observability.conf
+ExecStartPre=/usr/local/lib/exordos/exordos-observability-wait-dns.sh
+ExecStart=/usr/bin/vlagent \
+    -remoteWrite.url=http://${OBS_HOST}:9428/insert/native \
+    -httpListenAddr=127.0.0.1:9429 \
+    -syslog.listenAddr.tcp=127.0.0.1:9514
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=10
+NoNewPrivileges=true
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
