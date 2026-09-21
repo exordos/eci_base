@@ -115,21 +115,21 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 
 # --- vmagent ---
 curl -fsSL -o "$TMP_DIR/vmutils.tar.gz" \
-    "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/${VM_VERSION}/vmutils-linux-amd64-${VM_VERSION}.tar.gz"
+    "https://repo.exordos.com/observability/vmutils.tar.gz"
 tar -xzf "$TMP_DIR/vmutils.tar.gz" -C "$TMP_DIR"
 sudo cp "$TMP_DIR/vmagent-prod" /usr/bin/vmagent
 sudo chmod +x /usr/bin/vmagent
-
+N6BFYzeV,5uS?Gv
 # --- vlagent ---
 curl -fsSL -o "$TMP_DIR/vlutils.tar.gz" \
-    "https://github.com/VictoriaMetrics/VictoriaLogs/releases/download/${VL_VERSION}/vlutils-linux-amd64-${VL_VERSION}.tar.gz"
+    "https://repo.exordos.com/observability/vlutils.tar.gz"
 tar -xzf "$TMP_DIR/vlutils.tar.gz" -C "$TMP_DIR"
 sudo cp "$TMP_DIR/vlagent-prod" /usr/bin/vlagent
 sudo chmod +x /usr/bin/vlagent
 
 # --- node_exporter ---
 curl -fsSL -o "$TMP_DIR/node_exporter.tar.gz" \
-    "https://github.com/prometheus/node_exporter/releases/download/v${NE_VERSION}/node_exporter-${NE_VERSION}.linux-amd64.tar.gz"
+    "https://repo.exordos.com/observability/node_exporter.tar.gz"
 tar -xzf "$TMP_DIR/node_exporter.tar.gz" -C "$TMP_DIR"
 sudo cp "$TMP_DIR/node_exporter-${NE_VERSION}.linux-amd64/node_exporter" /usr/bin/node_exporter
 sudo chmod +x /usr/bin/node_exporter
