@@ -107,7 +107,9 @@ sudo systemctl enable exordos-bootstrap exordos-autoresize exordos-universal-age
 
 VM_VERSION="v1.131.0"
 VL_VERSION="v1.51.0"
-NE_VERSION="1.10.0"
+NE_VERSION="1.12.1"
+# sha256 of node_exporter-${NE_VERSION}.linux-amd64.tar.gz (upstream sha256sums.txt)
+NE_SHA256="b51d8a76aa2a9156a55d501aca6276fae09e262259a5e4e831d2c2222f084e63"
 
 OBS_CFG_DIR=/etc/exordos_observability
 TMP_DIR=$(mktemp -d)
@@ -132,7 +134,8 @@ sudo chmod +x /usr/bin/vlagent
 # --- node_exporter ---
 # https://github.com/prometheus/node_exporter/releases/download/v${NE_VERSION}/node_exporter-${NE_VERSION}.linux-amd64.tar.gz
 curl -fsSL -o "$TMP_DIR/node_exporter.tar.gz" \
-    "https://repo.exordos.com/observability/node_exporter.tar.gz"
+    "https://repo.exordos.com/observability/node_exporter-${NE_VERSION}.linux-amd64.tar.gz"
+echo "$NE_SHA256  $TMP_DIR/node_exporter.tar.gz" | sha256sum -c -
 tar -xzf "$TMP_DIR/node_exporter.tar.gz" -C "$TMP_DIR"
 sudo cp "$TMP_DIR/node_exporter-${NE_VERSION}.linux-amd64/node_exporter" /usr/bin/node_exporter
 sudo chmod +x /usr/bin/node_exporter
