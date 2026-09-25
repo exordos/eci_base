@@ -33,7 +33,7 @@ This command builds both images: `exordos-base` and `exordos-base-minimal`.
 You can customize the build using the following environment variables:
 
 - `GEN_USER_PASSWD` - Set the default user password (default: "ubuntu")
-- `GEN_SDK_VERSION` - Specify the SDK version to install (default: "3.6.2")
+- `GEN_SDK_VERSION` - Specify the SDK version to install (default: "3.6.4")
 - `LOCAL_GENESIS_SDK_PATH` - Path to local SDK copy for development purposes
 
 Examples:
@@ -44,7 +44,7 @@ export GEN_USER_PASSWD=secret
 exordos build -i ~/.ssh/key.pub -f .
 
 # Use specific SDK version
-export GEN_SDK_VERSION=3.6.2
+export GEN_SDK_VERSION=3.6.4
 exordos build -i ~/.ssh/key.pub -f .
 
 # Build with local copy of the SDK
