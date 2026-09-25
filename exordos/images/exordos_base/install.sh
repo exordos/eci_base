@@ -148,6 +148,8 @@ sudo cp "$IMG_ARTS_PATH/etc/exordos_observability/exordos-observability-wait-dns
 sudo chmod +x "/usr/local/lib/exordos/exordos-observability-wait-dns.sh"
 
 sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-node-exporter.service" $SYSTEMD_SERVICE_DIR
+# Metrics of elements for the textfile collector of node_exporter
+sudo install -d -m 755 "$WORK_DIR/node_exporter"
 sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-vmagent.service" $SYSTEMD_SERVICE_DIR
 sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-vlagent.service" $SYSTEMD_SERVICE_DIR
 

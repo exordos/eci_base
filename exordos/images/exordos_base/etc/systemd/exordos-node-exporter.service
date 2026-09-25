@@ -5,8 +5,11 @@ Wants=network-online.target
 
 [Service]
 Type=simple
+# Elements drop metrics of their own there as *.prom files, written
+# atomically; a file is read at every scrape, no restart needed.
 ExecStart=/usr/bin/node_exporter \
-    --web.listen-address=127.0.0.1:9100
+    --web.listen-address=127.0.0.1:9100 \
+    --collector.textfile.directory=/var/lib/exordos/node_exporter
 Restart=on-failure
 RestartSec=5s
 TimeoutStopSec=5
