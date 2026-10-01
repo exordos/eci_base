@@ -86,6 +86,15 @@ sudo cp "$IMG_ARTS_PATH/etc/udev/90-exordos-autoresize.rules" /etc/udev/rules.d/
 sudo mkdir -p "/usr/local/lib/exordos/"
 sudo cp -a "$IMG_ARTS_PATH/lib/." "/usr/local/lib/exordos/"
 
+# Schedule automatic updates overnight without daytime catch-up after boot.
+for TIMER in apt-daily apt-daily-upgrade; do
+    sudo mkdir -p "${SYSTEMD_SERVICE_DIR}${TIMER}.timer.d"
+    sudo cp "$IMG_ARTS_PATH/etc/systemd/${TIMER}.timer.d/exordos-schedule.conf" \
+        "${SYSTEMD_SERVICE_DIR}${TIMER}.timer.d/"
+done
+sudo systemctl daemon-reload
+sudo systemctl enable apt-daily.timer apt-daily-upgrade.timer
+
 # Enable exordos core services
 sudo systemctl enable exordos-bootstrap exordos-autoresize exordos-universal-agent
 
