@@ -98,26 +98,6 @@ curl --location 'http://10.20.0.2:11010/v1/nodes/' \
 }
 ```
 
-## Weekly profile version updates
-
-The `Update base image profile versions` workflow runs every Sunday at 00:00 UTC
-and can also be started manually. It scans `exordos.yaml` files throughout active,
-non-fork repositories in the `exordos` GitHub organization. Images using
-`exordos_base` or `exordos_base_minimal` receive the latest stable `X.Y.Z` (or
-`vX.Y.Z`) tag from this repository as their `profile_version`, including images
-without an explicit version. Other profiles are left unchanged. Changed files
-are grouped into one pull request per repository, using the dedicated
-`automation/update-base-image-profiles` branch. Later runs refresh that branch
-from the default branch and update the existing open PR, avoiding duplicates.
-Edits on the automation branch may be replaced. Unchanged repositories produce
-no PR. Updates are never merged automatically. Repository failures fail the job after the
-remaining repositories have been checked.
-
-Configure the Actions secret `EXORDOS_REPOSITORIES_TOKEN` with a token that can
-read the organization's target repositories, write Contents, and write Pull
-requests. Branch rules must permit updates to the automation branch. The workflow's
-ordinary `GITHUB_TOKEN` cannot write to other repositories.
-
 ## 📃 Bootstrap scripts
 
 For next images in hierarchy you can add scripts that are executed at the very first boot of the node. Actually it can be any executable file and not only bash scripts. Put your scripts in the `/var/lib/exordos/bootstrap/scripts` directory and they will be executed in the order of the files in the directory.
