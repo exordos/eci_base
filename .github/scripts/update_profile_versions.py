@@ -1,3 +1,19 @@
+# Copyright 2026 Genesis Corporation
+#
+# All Rights Reserved.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
 """Synchronize consumers with the latest stable base image tag."""
 
 import base64
@@ -57,7 +73,9 @@ def update_versions(source, version):
                                   json.dumps(version)))
             else:
                 if image.flow_style:
-                    raise ValueError("Cannot insert profile_version into a flow mapping")
+                    start = image.value[0][0].start_mark.index
+                    edits.append((start, start, f"profile_version: {json.dumps(version)}, "))
+                    continue
                 profile_key = next(key for key, _ in image.value if key.value == "profile")
                 end = source.find("\n", profile.end_mark.index)
                 newline = "\r\n" if "\r\n" in source else "\n"
@@ -69,7 +87,7 @@ def update_versions(source, version):
                     edits.append((end + 1, end + 1,
                                   " " * profile_key.start_mark.column +
                                   f"profile_version: {json.dumps(version)}" + newline))
-    for start, end, replacement in sorted(edits, reverse=True):
+    for start, end, replacement in sorted(set(edits), reverse=True):
         source = source[:start] + replacement + source[end:]
     return source
 

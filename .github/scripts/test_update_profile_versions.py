@@ -1,3 +1,19 @@
+# Copyright 2026 Genesis Corporation
+#
+# All Rights Reserved.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
 import unittest
 import base64
 import subprocess
@@ -48,6 +64,27 @@ other:
     def test_empty_or_unrelated_document(self):
         for source in ("", "# Comment\n", "other: value\n"):
             self.assertEqual(update_versions(source, "1.3.6"), source)
+
+    def test_repeated_image_aliases_are_edited_once(self):
+        for version_line in ('\n          profile_version: "1.2.1"', ''):
+            source = ('build:\n  elements:\n    - images:\n'
+                      '        - &base\n          profile: exordos_base' + version_line +
+                      '\n        - *base\n        - *base\n')
+            result = update_versions(source, "1.3.6")
+            images = yaml.safe_load(result)["build"]["elements"][0]["images"]
+            self.assertTrue(all(image["profile_version"] == "1.3.6" for image in images))
+            self.assertEqual(result.count("profile_version:"), 1)
+            self.assertEqual(update_versions(result, "1.3.6"), result)
+
+    def test_flow_mapping_missing_version_with_alias_and_trailing_comma(self):
+        for ending in ('}', ', }'):
+            source = ('build: {elements: [{images: [&base {profile: exordos_base' +
+                      ending + ', *base]}]}')
+            result = update_versions(source, "1.3.6")
+            images = yaml.safe_load(result)["build"]["elements"][0]["images"]
+            self.assertTrue(all(image["profile_version"] == "1.3.6" for image in images))
+            self.assertEqual(result.count("profile_version:"), 1)
+            self.assertEqual(update_versions(result, "1.3.6"), result)
 
     def run_repository(self, existing=False, unchanged=False, fallback=False):
         source = 'build: {elements: [{images: [{profile: exordos_base, profile_version: "1.2.1"}]}]}'
