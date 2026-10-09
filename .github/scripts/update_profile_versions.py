@@ -77,26 +77,27 @@ def update_versions(source, version):
 def update_repository(name, branch, version):
     prefix = f"/repos/{name}"
     base = api(f"{prefix}/git/ref/heads/{quote(branch, safe='')}")["object"]["sha"]
-    tree = api(f"{prefix}/git/trees/{base}?recursive=1")
-    if tree.get("truncated"):
-        raise ValueError("Repository tree is truncated; cannot scan every file")
     changes = []
-    for entry in tree["tree"]:
-        path = entry["path"]
-        if entry["type"] != "blob" or path.split("/")[-1] != "exordos.yaml":
-            continue
-        content = api(f"{prefix}/contents/{quote(path, safe='/')}?ref={base}")
+    for path in ("exordos/exordos.yaml", "exordos.yaml"):
+        try:
+            content = api(f"{prefix}/contents/{path}?ref={base}")
+        except subprocess.CalledProcessError as error:
+            if "(HTTP 404)" in (error.stderr or ""):
+                continue
+            raise
         source = base64.b64decode(content["content"]).decode("utf-8")
         updated = update_versions(source, version)
         if updated != source:
-            changes.append({"path": path, "mode": entry["mode"],
+            changes.append({"path": path, "mode": "100644",
                             "type": "blob", "content": updated})
+        break  # The root manifest is a fallback when the standard path is absent.
     if not changes:
         return
 
     # One dedicated branch and one atomic commit for all manifests in a repository.
+    base_tree = api(f"{prefix}/git/commits/{base}")["tree"]["sha"]
     new_tree = api(f"{prefix}/git/trees", {
-        "base_tree": tree["sha"], "tree": changes,
+        "base_tree": base_tree, "tree": changes,
     }, method="POST")["sha"]
     refs = api(f"{prefix}/git/matching-refs/heads/{UPDATE_BRANCH}")
     existing = next((ref for ref in refs if ref["ref"] == f"refs/heads/{UPDATE_BRANCH}"), None)
