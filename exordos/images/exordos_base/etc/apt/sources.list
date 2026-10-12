@@ -1,7 +1,7 @@
-# Ubuntu mirrors are selected through /etc/apt/my-mirrors.txt.
-deb mirror+file:///etc/apt/my-mirrors.txt release-updates universe main multiverse
-# deb-src mirror+file:///etc/apt/my-mirrors.txt release-updates universe main multiverse
-deb mirror+file:///etc/apt/my-mirrors.txt release main universe multiverse
-# deb-src mirror+file:///etc/apt/my-mirrors.txt release main universe multiverse
-deb mirror+file:///etc/apt/my-mirrors.txt release-security universe main multiverse
-# deb-src mirror+file:///etc/apt/my-mirrors.txt release-security universe main multiverse
+# Ubuntu mirrors are selected through /etc/apt/exordos-mirrors.txt.
+deb mirror+file:///etc/apt/exordos-mirrors.txt release-updates universe main multiverse
+# deb-src mirror+file:///etc/apt/exordos-mirrors.txt release-updates universe main multiverse
+deb mirror+file:///etc/apt/exordos-mirrors.txt release main universe multiverse
+# deb-src mirror+file:///etc/apt/exordos-mirrors.txt release main universe multiverse
+deb mirror+file:///etc/apt/exordos-mirrors.txt release-security universe main multiverse
+# deb-src mirror+file:///etc/apt/exordos-mirrors.txt release-security universe main multiverse

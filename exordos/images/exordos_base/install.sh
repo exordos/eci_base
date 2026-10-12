@@ -35,7 +35,7 @@ fi
 if [ -f /etc/apt/sources.list ]; then
     sudo mv /etc/apt/sources.list /etc/apt/sources.list.bak
 fi
-sudo cp "$IMG_ARTS_PATH/etc/apt/my-mirrors.txt" /etc/apt/my-mirrors.txt
+sudo cp "$IMG_ARTS_PATH/etc/apt/exordos-mirrors.txt" /etc/apt/exordos-mirrors.txt
 sudo cp "$IMG_ARTS_PATH/etc/apt/sources.list" /etc/apt/sources.list
 sudo sed -i "s/release/$(lsb_release -cs)/g" /etc/apt/sources.list
 
