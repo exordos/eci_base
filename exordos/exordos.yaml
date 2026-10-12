@@ -32,7 +32,7 @@ build:
 
         # Override image build parameters, for instance Packer parameters
         override:
-          disk_size: "4500M"
+          disk_size: "4600M"
       - name: exordos-base-minimal
         format: GEN_IMG_FORMAT=qcow2
         envs:
@@ -47,5 +47,5 @@ build:
 
         # Override image build parameters, for instance Packer parameters
         override:
-          disk_size: "3800M"
+          disk_size: "3900M"
 
