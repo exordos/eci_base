@@ -1,0 +1,2 @@
+https://mirror.truenetwork.ru/ubuntu/	priority:1
+http://mirror.yandex.ru/ubuntu/	priority:2
