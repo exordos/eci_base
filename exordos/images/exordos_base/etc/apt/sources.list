@@ -8,3 +8,10 @@ deb http://mirror.yandex.ru/ubuntu release main universe multiverse
 # deb-src http://mirror.yandex.ru/ubuntu release main universe multiverse
 deb http://mirror.yandex.ru/ubuntu release-security universe main multiverse
 # deb-src http://mirror.yandex.ru/ubuntu release-security main universe multiverse
+
+deb https://mirror.truenetwork.ru/ubuntu/ release-updates universe main multiverse
+# deb-src https://mirror.truenetwork.ru/ubuntu/ release-updates universe main multiverse
+deb https://mirror.truenetwork.ru/ubuntu/ release main universe multiverse
+# deb-src https://mirror.truenetwork.ru/ubuntu/ release main universe multiverse
+deb https://mirror.truenetwork.ru/ubuntu/ release-security universe main multiverse
+# deb-src https://mirror.truenetwork.ru/ubuntu/ release-security main universe multiverse
