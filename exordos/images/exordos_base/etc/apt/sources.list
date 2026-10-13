@@ -1,10 +1,7 @@
-# Ubuntu sources have moved to the /etc/apt/sources.list.d/ubuntu.sources
-# file, which uses the deb822 format. Use deb822-formatted .sources files
-# to manage package sources in the /etc/apt/sources.list.d/ directory.
-# See the sources.list(5) manual page for details.
-deb http://mirror.yandex.ru/ubuntu release-updates universe main multiverse
-# deb-src http://mirror.yandex.ru/ubuntu release-updates universe main multiverse
-deb http://mirror.yandex.ru/ubuntu release main universe multiverse
-# deb-src http://mirror.yandex.ru/ubuntu release main universe multiverse
-deb http://mirror.yandex.ru/ubuntu release-security universe main multiverse
-# deb-src http://mirror.yandex.ru/ubuntu release-security main universe multiverse
+# Ubuntu mirrors are selected through /etc/apt/exordos-mirrors.txt.
+deb mirror+file:///etc/apt/exordos-mirrors.txt release-updates universe main multiverse
+# deb-src mirror+file:///etc/apt/exordos-mirrors.txt release-updates universe main multiverse
+deb mirror+file:///etc/apt/exordos-mirrors.txt release main universe multiverse
+# deb-src mirror+file:///etc/apt/exordos-mirrors.txt release main universe multiverse
+deb mirror+file:///etc/apt/exordos-mirrors.txt release-security universe main multiverse
+# deb-src mirror+file:///etc/apt/exordos-mirrors.txt release-security universe main multiverse
