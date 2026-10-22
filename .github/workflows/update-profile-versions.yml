@@ -1,6 +1,7 @@
 name: Update base image profile versions
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * 0'
 
