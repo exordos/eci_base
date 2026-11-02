@@ -10,6 +10,7 @@ EnvironmentFile=-/etc/exordos_observability/observability.conf
 ExecStartPre=/usr/local/lib/exordos/exordos-observability-wait-dns.sh
 ExecStart=/usr/bin/vlagent \
     -remoteWrite.url=http://${OBS_HOST}:8428/insert/native \
+    -remoteWrite.maxDiskUsagePerURL=1GB \
     -httpListenAddr=127.0.0.1:9429 \
     -syslog.listenAddr.tcp=127.0.0.1:9514
 Restart=on-failure
