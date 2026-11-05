@@ -84,7 +84,8 @@ sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-autoresize.service" $SYSTEMD_SERVICE
 sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-autoresize@.service" $SYSTEMD_SERVICE_DIR
 sudo cp "$IMG_ARTS_PATH/etc/systemd/exordos-universal-agent.service" $SYSTEMD_SERVICE_DIR
 sudo cp "$IMG_ARTS_PATH/etc/udev/90-exordos-autoresize.rules" /etc/udev/rules.d/
-sudo mkdir -p "/usr/local/lib/exordos/"
+#sudo mkdir -p "/usr/local/lib/exordos/"
+sudo install -d -o root -g root -m 0755 "/usr/local/lib/exordos/"
 sudo cp -a "$IMG_ARTS_PATH/lib/." "/usr/local/lib/exordos/"
 
 # Schedule automatic updates overnight without daytime catch-up after boot.
