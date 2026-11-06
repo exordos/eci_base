@@ -21,6 +21,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 from urllib.parse import quote
 
 import yaml
@@ -36,10 +37,16 @@ def api(endpoint, payload=None, paginate=False, method="PUT"):
         command += ["--paginate", "--slurp"]
     if payload is not None:
         command += ["--method", method, "--input", "-"]
-    result = subprocess.run(
-        command, input=json.dumps(payload) if payload is not None else None,
-        text=True, capture_output=True, check=True,
-    )
+    try:
+        result = subprocess.run(
+            command, input=json.dumps(payload) if payload is not None else None,
+            text=True, capture_output=True, check=True,
+        )
+    except subprocess.CalledProcessError as error:
+        if error.stderr:
+            print(error.stderr, file=sys.stderr, end="" if error.stderr.endswith("\n") else "\n",
+                  flush=True)
+        raise
     return json.loads(result.stdout)
 
 
