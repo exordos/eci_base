@@ -25,6 +25,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+      - name: Verify security update sources
+        run: bash exordos/images/exordos_base/tests/test-security-sources.sh
       - name: Build Exordos Core
         run: |
           set -eux

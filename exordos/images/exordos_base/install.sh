@@ -42,7 +42,7 @@ sudo sed -i "s/release/$(lsb_release -cs)/g" /etc/apt/sources.list
 sudo sed -i 's/^preserve_hostname: false/preserve_hostname: false\napt_preserve_sources_list: true/' /etc/cloud/cloud.cfg
 
 # Install packages
-sudo apt update
+sudo apt-get update -o APT::Update::Error-Mode=any
 sudo apt dist-upgrade -y
 sudo apt install -y build-essential python3-dev python3-venv \
     cloud-guest-utils irqbalance qemu-guest-agent libev-dev rsync parted j2cli vim \
