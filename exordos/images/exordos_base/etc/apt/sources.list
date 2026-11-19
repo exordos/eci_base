@@ -3,5 +3,5 @@ deb mirror+file:///etc/apt/exordos-mirrors.txt release-updates universe main mul
 # deb-src mirror+file:///etc/apt/exordos-mirrors.txt release-updates universe main multiverse
 deb mirror+file:///etc/apt/exordos-mirrors.txt release main universe multiverse
 # deb-src mirror+file:///etc/apt/exordos-mirrors.txt release main universe multiverse
-deb mirror+file:///etc/apt/exordos-mirrors.txt release-security universe main multiverse
-# deb-src mirror+file:///etc/apt/exordos-mirrors.txt release-security universe main multiverse
+deb https://security.ubuntu.com/ubuntu release-security universe main multiverse
+# deb-src https://security.ubuntu.com/ubuntu release-security universe main multiverse
