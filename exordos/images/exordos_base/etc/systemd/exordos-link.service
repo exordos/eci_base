@@ -1,0 +1,18 @@
+[Unit]
+Description=Exordos Link
+Wants=network-online.target
+After=network-online.target exordos-universal-agent.service
+ConditionPathExists=/etc/exordos-link/listeners.json
+ConditionPathExists=/var/lib/exordos/link/identity.pem
+
+[Service]
+User=exordos-link
+Group=exordos-link
+ExecStart=/usr/bin/exordos-link /etc/exordos-link/listeners.json
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=2s
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

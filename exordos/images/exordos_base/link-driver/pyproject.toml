@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=77,<90"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "exordos-link-driver"
+version = "1.0.0"
+license = "Apache-2.0"
+
+[project.entry-points.gcl_sdk_universal_agent]
+LinkCapabilityDriver = "link_driver:LinkCapabilityDriver"
+
+[tool.setuptools]
+py-modules = ["link_driver"]

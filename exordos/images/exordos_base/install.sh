@@ -71,6 +71,7 @@ else
     uv pip install gcl-sdk=="$GEN_SDK_VERSION"
 fi
 
+uv pip install --no-deps "$IMG_ARTS_PATH/link-driver"
 sudo cp -r "$IMG_ARTS_PATH/etc/exordos_universal_agent" /etc/
 sudo ln -sf "$AGENT_PATH/.venv/bin/exordos-universal-agent" "/usr/bin/exordos-universal-agent"
 
@@ -99,6 +100,12 @@ sudo systemctl enable apt-daily.timer apt-daily-upgrade.timer
 
 # Enable exordos core services
 sudo systemctl enable exordos-bootstrap exordos-autoresize exordos-universal-agent
+
+# Universal Agent delivers Link's configuration and identity.
+bash "$IMG_ARTS_PATH/install-link.sh"
+sudo install -d -o root -g exordos-link -m 0750 /etc/exordos-link "$WORK_DIR/link"
+sudo install -m 0644 "$IMG_ARTS_PATH/etc/systemd/exordos-link.service" "$SYSTEMD_SERVICE_DIR"
+sudo systemctl enable exordos-link.service
 
 # Install observability agents: vmagent, vlagent, node_exporter.
 # These are baked into the base image so every node can ship metrics/logs
